@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Click the Circle Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+    }
+
+    #gameArea {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      margin: 30px auto;
+      background-color: #e0f7fa;
+      border: 2px solid #333;
+      overflow: hidden;
+    }
+
+    #circle {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #score, #timer {
+      font-size: 24px;
+      margin: 10px;
+    }
+
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Click the Circle Game Degine by Ajay Kumar Behera</h1>
+  <div id="score">Score: 0</div>
+  <div id="timer">Time Left: 10s</div>
+  <button id="startBtn">Start Game</button>
+
+  <div id="gameArea">
+    <div id="circle"></div>
+  </div>
+
+  <script>
+    const circle = document.getElementById('circle');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+    const startBtn = document.getElementById('startBtn');
+    const gameArea = document.getElementById('gameArea');
+
+    let score = 0;
+    let timeLeft = 10;
+    let gameInterval;
+    let timerInterval;
+
+    function getRandomPosition() {
+      const x = Math.floor(Math.random() * (gameArea.clientWidth - 50));
+      const y = Math.floor(Math.random() * (gameArea.clientHeight - 50));
+      return { x, y };
+    }
+
+    function moveCircle() {
+      const pos = getRandomPosition();
+      circle.style.left = pos.x + 'px';
+      circle.style.top = pos.y + 'px';
+    }
+
+    function startGame() {
+      score = 0;
+      timeLeft = 10;
+      scoreDisplay.textContent = 'Score: 0';
+      timerDisplay.textContent = 'Time Left: 10s';
+      startBtn.disabled = true;
+      moveCircle();
+
+      circle.style.display = 'block';
+      gameInterval = setInterval(moveCircle, 700);
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      clearInterval(gameInterval);
+      clearInterval(timerInterval);
+      circle.style.display = 'none';
+      startBtn.disabled = false;
+      alert(`Game Over! Your score: ${score}`);
+    }
+
+    circle.addEventListener('click', () => {
+      score++;
+      scoreDisplay.textContent = `Score: ${score}`;
+      moveCircle();
+    });
+
+    startBtn.addEventListener('click', startGame);
+  </script>
+</body>
+</html>
